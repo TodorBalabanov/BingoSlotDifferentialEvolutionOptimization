@@ -113,12 +113,12 @@ namespace BingoSlotDifferentialEvolutionOptimization
 	* Slot game paytable.
 	*/
 		private int[][] paytable = {
-			new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 75, 50, 20, 15, 9, 7, 5, 3, 2, 1, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 150, 100, 75, 50, 35, 20, 15, 9, 7, 3, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 300, 250, 200, 150, 100, 75, 50, 30, 20, 10, 0, 0, 0, 0 },
+			new int[]{ 0, 0, 0,   0,   0,   0,   0,   0,  0,  0,  0,  0,  0, 0, 0, 0, 0 },
+			new int[]{ 0, 0, 0,   0,   0,   0,   0,   0,  0,  0,  0,  0,  0, 0, 0, 0, 0 },
+			new int[]{ 0, 0, 0,   0,   0,   0,   0,   0,  0,  0,  0,  0,  0, 0, 0, 0, 0 },
+			new int[]{ 0, 0, 0, 250, 100,  75,  50,  25, 15,  9,  6,  3,  1, 0, 0, 0, 0 },
+			new int[]{ 0, 0, 0, 500, 250, 100,  75,  50, 25, 15, 10,  7,  3, 0, 0, 0, 0 },
+			new int[]{ 0, 0, 0, 750, 500, 250, 150, 100, 75, 50, 30, 20, 10, 0, 0, 0, 0 },
 		};
 
 		/**
@@ -1135,12 +1135,12 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			totalNumberOfGames++;
 		}
 
-		public double rtp ()
+		public double rtpDifference (double target)
 		{
-			return (double)wonMoney / (double)lostMoney;
+			return Math.Abs (target - (double)wonMoney / (double)lostMoney);
 		}
 
-		public double deviation ()
+		public double prizeDeviation ()
 		{
 			int k = 0;
 			double average = 0;
@@ -1171,6 +1171,27 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			}
 
 			return result;
+		}
+
+		public double symbolsDiversity (int length)
+		{
+			int count = 0;
+			int matches = 0;
+
+			for (int i = 0; i < reels.Length; i++) {
+				for (int j = 0; j < reels [i].Length; j++) {
+					for (int k = 0; k < length - 1; k++) {
+						for (int l = k + 1; l < length; l++) {
+							if ((reels [i] [(j + k) % reels [i].Length]) == (reels [i] [(j + l) % reels [i].Length])) {
+								matches++;
+							}
+							count++;
+						}
+					}
+				}
+			}
+
+			return (double)matches / (double)count;
 		}
 
 		/**
