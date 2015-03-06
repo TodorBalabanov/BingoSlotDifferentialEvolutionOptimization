@@ -4,17 +4,17 @@ namespace BingoSlotDifferentialEvolutionOptimization
 {
 	class MainClass
 	{
-		private static long NUMBER_OF_EXPERIMENTS = 1;
+		private const long NUMBER_OF_EXPERIMENTS = 10;
 
-		private static long NUMBER_OF_SIMUALTIONS = 1000000;
+		private const long NUMBER_OF_SIMUALTIONS = 1000000;
 
 		public static void Main (string[] args)
 		{
 			int[][] reels = { new int[] {
-					3, 4, 3,
-					4, 9, 7, 5, 9, 11, 9, 4, 4, 8, 6, 5, 11, 11, 4, 11, 6, 5, 11, 4, 5,
+					3, 3, 3,
+					3, 3, 3, 12, 3, 3, 3, 9, 4, 4, 8, 6, 5, 11, 11, 4, 11, 6, 5, 11, 4, 5,
 					9, 5, 11, 4, 11, 8, 7, 4, 10, 6, 4, 6, 9, 5, 7, 7, 12, 11, 11, 6,
-					6, 9, 11, 7, 12, 9, 12, 12, 4, 4, 12, 11, 7, 6, 11, 7, 9, 4, 5,
+					6, 9, 11, 7, 12, 9, 12, 4, 4, 12, 11, 7, 6, 11, 7, 9, 4, 5,
 				},
 				new int[] {
 					3, 4, 3, 
@@ -45,6 +45,10 @@ namespace BingoSlotDifferentialEvolutionOptimization
 
 			};
 
+			DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels);
+			dde.select ();
+			dde.differs ();
+
 			for (int r = 0; r < NUMBER_OF_EXPERIMENTS; r++) {
 				Simulation simulation = new Simulation ();
 				simulation.loadReels (reels);
@@ -58,6 +62,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 				Console.WriteLine ("RTP difference from target: " + simulation.rtpDifference (0.9));
 				Console.WriteLine ("Prize deviation MSE: " + simulation.prizeDeviation ());
 				Console.WriteLine ("Symbols diversity: " + simulation.symbolsDiversity (3));
+				Console.WriteLine ("Cost function: " + simulation.costFunction (0.9, 3));
 			}
 		}
 	}

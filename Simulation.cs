@@ -8,15 +8,15 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		/*
 	* Used in bingo cards generation for better suffling.
 	*/
-		private static int NUMBER_OF_SHAKES = 30;
+		private const int NUMBER_OF_SHAKES = 30;
 
-		private static int BINGO_CARDS_TALONS = 6;
+		private const int BINGO_CARDS_TALONS = 6;
 
-		private static int BINGO_CARDS_WIDTH = 9;
+		private const int BINGO_CARDS_WIDTH = 9;
 
-		private static int BINGO_CARDS_LENGTH = 18;
+		private const int BINGO_CARDS_LENGTH = 18;
 
-		private static int BINGO_BONUS_DISTRIBUTION_LENGTH = 63;
+		private const int BINGO_BONUS_DISTRIBUTION_LENGTH = 63;
 
 		/**
 	 * Bingo line bonus distribution.
@@ -140,9 +140,9 @@ namespace BingoSlotDifferentialEvolutionOptimization
 	 * List of symbols names.
 	 */
 		private String[] symbols = {
-			"SYM00",
-			"SYM01",
-			"SYM02",
+			"",
+			"",
+			"",
 			"SYM03",
 			"SYM04",
 			"SYM05",
@@ -153,10 +153,10 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			"SYM10",
 			"SYM11",
 			"SYM12",
-			"SYM16",
-			"SYM17",
-			"SYM18",
-			"SYM19",
+			"",
+			"",
+			"",
+			"",
 		};
 
 		/**
@@ -549,7 +549,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		/**
 	* Symbols win hit rate in base game.
 	*/
-		private static long[][] baseSymbolMoney = {
+		private long[][] baseSymbolMoney = {
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -561,7 +561,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		/**
 	* Symbols hit rate in base game.
 	*/
-		private static long[][] baseGameSymbolsHitRate = {
+		private long[][] baseGameSymbolsHitRate = {
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -1192,6 +1192,11 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			}
 
 			return (double)matches / (double)count;
+		}
+
+		public double costFunction (double target, int length)
+		{
+			return symbolsDiversity (length) * 100 + rtpDifference (target) * 10 + prizeDeviation () * 1;
 		}
 
 		/**
