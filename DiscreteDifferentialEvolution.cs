@@ -2,19 +2,25 @@
 
 namespace BingoSlotDifferentialEvolutionOptimization
 {
-	public class DiscreteDifferentialEvolution
-	{
-		private const int POPULATION_SIZE = 17;
+	class DiscreteDifferentialEvolution
+	{ 
+		public const long NUMBER_OF_RECOMBINATIONS = 170;
 
-		private const int NUMBER_OF_REELS = 5;
+		public const int POPULATION_SIZE = 17;
 
-		private const int REEL_LENGTH = 63;
+		public const int NUMBER_OF_REELS = 5;
+
+		public const int REEL_LENGTH = 63;
+
+		private double targetRtp;
+
+		private int symbolsDiversity;
 
 		private double[] fitness = new double[ POPULATION_SIZE ];
 
-		private int[,,] population = new int[POPULATION_SIZE, NUMBER_OF_REELS, REEL_LENGTH];
+		private int[][][] population = new int[POPULATION_SIZE][][];
 
-		private int[,] difference = new int[NUMBER_OF_REELS, REEL_LENGTH];
+		private int[][] offspring = null;
 
 		private int targetIndex = -1;
 
@@ -27,10 +33,10 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		public void select ()
 		{
 			do {
-				targetIndex = Util.prng.Next (population.GetLength (0));
-				baseIndex = Util.prng.Next (population.GetLength (0));
-				aIndex = Util.prng.Next (population.GetLength (0));
-				bIndex = Util.prng.Next (population.GetLength (0));
+				targetIndex = Util.prng.Next (population.Length);
+				baseIndex = Util.prng.Next (population.Length);
+				aIndex = Util.prng.Next (population.Length);
+				bIndex = Util.prng.Next (population.Length);
 			} while(targetIndex == baseIndex || targetIndex == aIndex || targetIndex == bIndex || baseIndex == aIndex || baseIndex == bIndex || aIndex == bIndex);
 		}
 
@@ -38,14 +44,14 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		{
 			int min = int.MaxValue;
 			int max = int.MinValue;
-			for (int i = 0; i < difference.GetLength (0); i++) {
-				for (int j = 0; j < difference.GetLength (1); j++) {
-					difference [i, j] = population [aIndex, i, j] - population [bIndex, i, j];
-					if (min > difference [i, j]) {
-						min = difference [i, j];
+			for (int i = 0; i < offspring.Length; i++) {
+				for (int j = 0; j < offspring[i].Length; j++) {
+					offspring [i][j] = population [aIndex][i][j] - population [bIndex][i][j];
+					if (min > offspring [i][j]) {
+						min = offspring [i][j];
 					}
-					if (max < difference [i, j]) {
-						max = difference [i, j];
+					if (max < offspring [i][j]) {
+						max = offspring [i][j];
 					}
 				}
 			}
@@ -53,11 +59,11 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			/*
 			* Normalize.
 			*/
-			for (int i = 0; i < difference.GetLength (0); i++) {
-				for (int j = 0; j < difference.GetLength (1); j++) {
-					difference [i, j] -= min; 
+			for (int i = 0; i < offspring.Length; i++) {
+				for (int j = 0; j < offspring[i].Length; j++) {
+					offspring [i][j] -= min; 
 					if (min < max) {
-						difference [i, j] = 3 * difference [i, j] / (max - min + 1) - 1; 
+						offspring [i][j] = 3 * offspring [i][j] / (max - min + 1) - 1; 
 					}
 				}
 			}
@@ -65,16 +71,60 @@ namespace BingoSlotDifferentialEvolutionOptimization
 
 		public void mutate ()
 		{
-			for (int i = 0; i < difference.GetLength (0); i++) {
-				for (int j = 0; j < difference.GetLength (1); j++) {
-					difference [i, j] += population [baseIndex, i, j];
+			for (int i = 0; i < offspring.Length; i++) {
+				for (int j = 0; j < offspring[i].Length; j++) {
+					offspring [i][j] += population [baseIndex][i][j];
 				}
 			}
 
-			//TODO Validate reels.
+			/*
+			 * Validate reels.
+			 */
+			for (int i = 0; i < offspring.Length; i++) {
+				for (int j = 0; j < offspring[i].Length; j++) {
+					if (Symbols.isValid (offspring [i][j]) == false) {
+						offspring [i][j] = Symbols.randomValid ();
+					}
+				}
+			}
+		}
+		
+		public void crossover () {
+			for (int i = 0; i < offspring.Length; i++) {
+				for (int j = 0; j < offspring[i].Length; j++) {
+					if(Util.prng.NextDouble() < 0.5) {
+						offspring [i][j] = population [targetIndex][i][j];
+					}
+				}
+			}
 		}
 
-		public DiscreteDifferentialEvolution (int[][] reels)
+		public void survive() {
+			SlotMachineSimulation simulation = new SlotMachineSimulation ();
+			simulation.load (offspring);
+			simulation.simulate ();
+			double cost = simulation.costFunction (targetRtp, symbolsDiversity);
+			if(cost < fitness[targetIndex]) {
+				fitness [targetIndex] = cost;
+				for (int i = 0; i < offspring.Length; i++) {
+					for (int j = 0; j < offspring[i].Length; j++) {
+						population [targetIndex][i][j] = offspring [i][j];
+					}
+				}
+			}
+		}
+
+		public void optimize() {
+			for (int r = 0; r < NUMBER_OF_RECOMBINATIONS; r++) {
+				select ();
+				differs ();
+				mutate ();
+				crossover ();
+				survive ();
+			}
+		}
+
+		public DiscreteDifferentialEvolution (int[][] reels, double targetRtp, int symbolsDiversity)
 		{
 			if (reels.Length != NUMBER_OF_REELS) {
 				Console.WriteLine ("Number of reals is incorrect!");
@@ -88,29 +138,72 @@ namespace BingoSlotDifferentialEvolutionOptimization
 				}
 			}
 
-			for (int p = 0; p < population.GetLength (0); p++) {
+			for (int p=0; p<POPULATION_SIZE; p++) {
+				population[p] = new int[NUMBER_OF_REELS] [];
+				for(int i=0; i<NUMBER_OF_REELS; i++) {
+					population[p][i] = new int[REEL_LENGTH];
+				}
+			}
+
+			offspring = new int[NUMBER_OF_REELS] [];
+			for (int i=0; i<NUMBER_OF_REELS; i++) {
+				offspring[i] = new int[REEL_LENGTH];
+			}
+
+			this.targetRtp = targetRtp;
+			this.symbolsDiversity = symbolsDiversity;
+
+			for (int p = 0; p < population.Length; p++) {
 				for (int i = 0; i < reels.Length; i++) {
 					for (int j = 0; j < reels [i].Length; j++) {
-						population [p, i, j] = reels [i] [j];
+						population [p][i][j] = reels [i] [j];
 					}
 				}
 			}
 
 			/*
-			* Move around, but keep the first unchanged.
-			*/
-			for (int p = 1; p < population.GetLength (0); p++) {
+			 * Move around, but keep the first unchanged.
+			 */
+			for (int p = 1; p < population.Length; p++) {
 				for (int i = 0; i < reels.Length; i++) {
 					for (int j = 0; j < reels [i].Length; j++) {
 						int q = Util.prng.Next (reels [i].Length);
-						int swap = population [p, i, q];
-						population [p, i, q] = population [p, i, j];
-						population [p, i, j] = swap;
+						int swap = population [p][i][q];
+						population [p][i][q] = population [p][i][j];
+						population [p][i][j] = swap;
 					}
 				}
 			}
 
+			/*
+			 * Evaluate population fintess.
+			 */
+			for (int p = 0; p < population.Length; p++) {
+				SlotMachineSimulation simulation = new SlotMachineSimulation ();
+				simulation.load (population[p]);
+				simulation.simulate ();
+				simulation.costFunction (targetRtp, symbolsDiversity);
+				fitness [p] = simulation.costFunction (targetRtp, symbolsDiversity);
+			}
+		}
+
+		public override string ToString ()
+		{
+			string result = "";
+
+			for (int p = 0; p < population.Length; p++) {
+				result += fitness [p];
+				result += "\r\n";
+				for (int i = 0; i < population[p].Length; i++) {
+					for (int j = 0; j < population[p][i].Length; j++) {
+						result += population[p][i][j];
+						result += "\t";
+					}
+					result += "\r\n";
+				}
+			}
+
+			return result;
 		}
 	}
 }
-

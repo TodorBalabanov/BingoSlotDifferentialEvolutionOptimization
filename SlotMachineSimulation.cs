@@ -2,9 +2,8 @@
 
 namespace BingoSlotDifferentialEvolutionOptimization
 {
-	class Simulation
+	class SlotMachineSimulation
 	{
-
 		/*
 	* Used in bingo cards generation for better suffling.
 	*/
@@ -17,6 +16,10 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		private const int BINGO_CARDS_LENGTH = 18;
 
 		private const int BINGO_BONUS_DISTRIBUTION_LENGTH = 63;
+
+		public const long NUMBER_OF_EXPERIMENTS = 10;
+
+		public const long NUMBER_OF_SIMUALTIONS = 100;
 
 		/**
 	 * Bingo line bonus distribution.
@@ -980,7 +983,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 	*
 	* @date 27 Feb 2015
 	 */
-		public Simulation ()
+		public SlotMachineSimulation ()
 		{
 			totalBet = lines.Length;
 		}
@@ -995,7 +998,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			return lostMoney;
 		}
 
-		public void loadReels (int[][]reels)
+		public void load (int[][]reels)
 		{
 			for (int i = 0; i < reels.Length; i++) {
 				for (int j = 0; j < reels [i].Length; j++) {
@@ -1162,6 +1165,14 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		public double costFunction (double target, int length)
 		{
 			return symbolsDiversity (length) * 100 + rtpDifference (target) * 10 + prizeDeviation () * 1;
+		}
+
+		public void simulate() {
+			for (int r = 0; r < NUMBER_OF_EXPERIMENTS; r++) {
+				for (long e = 0; e < NUMBER_OF_SIMUALTIONS; e++) {
+					runBaseGame ();
+				}
+			}
 		}
 
 		/**

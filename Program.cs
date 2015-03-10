@@ -1,18 +1,15 @@
-﻿using System;
+﻿
+using System;
 
 namespace BingoSlotDifferentialEvolutionOptimization
 {
 	class MainClass
-	{
-		private const long NUMBER_OF_EXPERIMENTS = 10;
-
-		private const long NUMBER_OF_SIMUALTIONS = 1000000;
-
+	{ 
 		public static void Main (string[] args)
 		{
 			int[][] reels = { new int[] {
 					3, 3, 3,
-					3, 3, 3, 12, 3, 3, 3, 9, 4, 4, 8, 6, 5, 11, 11, 4, 11, 6, 5, 11, 4, 5,
+					3, 3, 3, 3, 3, 3, 3, 9, 4, 4, 8, 6, 5, 11, 11, 4, 11, 6, 5, 11, 4, 5,
 					9, 5, 11, 4, 11, 8, 7, 4, 10, 6, 4, 6, 9, 5, 7, 7, 12, 11, 11, 6,
 					6, 9, 11, 7, 12, 9, 12, 4, 4, 12, 11, 7, 6, 11, 7, 9, 4, 5,
 				},
@@ -45,25 +42,25 @@ namespace BingoSlotDifferentialEvolutionOptimization
 
 			};
 
-			DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels);
-			dde.select ();
-			dde.differs ();
+			DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels, 0.9, 3);
+			dde.optimize ();
+			Console.WriteLine (dde);
 
-			for (int r = 0; r < NUMBER_OF_EXPERIMENTS; r++) {
-				Simulation simulation = new Simulation ();
-				simulation.loadReels (reels);
-
-				for (long e = 0; e < NUMBER_OF_SIMUALTIONS; e++) {
-					simulation.runBaseGame ();
-				}
-
-				Console.WriteLine (simulation);
-
-				Console.WriteLine ("RTP difference from target: " + simulation.rtpDifference (0.9));
-				Console.WriteLine ("Prize deviation MSE: " + simulation.prizeDeviation ());
-				Console.WriteLine ("Symbols diversity: " + simulation.symbolsDiversity (3));
-				Console.WriteLine ("Cost function: " + simulation.costFunction (0.9, 3));
-			}
+//			for (int r = 0; r < SlotMachineSimulation.NUMBER_OF_EXPERIMENTS; r++) {
+//				SlotMachineSimulation simulation = new SlotMachineSimulation ();
+//				simulation.load (reels);
+//
+//				for (long e = 0; e < SlotMachineSimulation.NUMBER_OF_SIMUALTIONS; e++) {
+//					simulation.runBaseGame ();
+//				}
+//
+//				Console.WriteLine (simulation);
+//
+//				Console.WriteLine ("RTP difference from target: " + simulation.rtpDifference (0.9));
+//				Console.WriteLine ("Prize deviation MSE: " + simulation.prizeDeviation ());
+//				Console.WriteLine ("Symbols diversity: " + simulation.symbolsDiversity (3));
+//				Console.WriteLine ("Cost function: " + simulation.costFunction (0.9, 3));
+//			}
 		}
 	}
 }
