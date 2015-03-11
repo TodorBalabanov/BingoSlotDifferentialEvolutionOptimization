@@ -7,7 +7,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		/**
 		 * Report in steps.
 		 */
-		public const bool VERBOSE = false;
+		public const bool VERBOSE = true;
 
 		/**
 		* Pseudo-random number generator.
