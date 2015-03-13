@@ -2,21 +2,24 @@
 
 namespace BingoSlotDifferentialEvolutionOptimization
 {
-	class Simulation
+	class SlotMachineSimulation
 	{
-
 		/*
 	* Used in bingo cards generation for better suffling.
 	*/
-		private static int NUMBER_OF_SHAKES = 30;
+		private const int NUMBER_OF_SHAKES = 30;
 
-		private static int BINGO_CARDS_TALONS = 6;
+		private const int BINGO_CARDS_TALONS = 6;
 
-		private static int BINGO_CARDS_WIDTH = 9;
+		private const int BINGO_CARDS_WIDTH = 9;
 
-		private static int BINGO_CARDS_LENGTH = 18;
+		private const int BINGO_CARDS_LENGTH = 18;
 
-		private static int BINGO_BONUS_DISTRIBUTION_LENGTH = 63;
+		private const int BINGO_BONUS_DISTRIBUTION_LENGTH = 63;
+
+		public const long NUMBER_OF_EXPERIMENTS = 10;
+
+		public const long NUMBER_OF_SIMUALTIONS = 1000000;
 
 		/**
 	 * Bingo line bonus distribution.
@@ -110,18 +113,6 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		private int[] numbersInRow = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 		/**
-	* Slot game paytable.
-	*/
-		private int[][] paytable = {
-			new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 75, 50, 20, 15, 9, 7, 5, 3, 2, 1, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 150, 100, 75, 50, 35, 20, 15, 9, 7, 3, 0, 0, 0, 0 },
-			new int[]{ 0, 0, 0, 300, 250, 200, 150, 100, 75, 50, 30, 20, 10, 0, 0, 0, 0 },
-		};
-
-		/**
 	 * Lines combinations.
 	 */
 		private int[][] lines = {
@@ -137,356 +128,53 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		};
 
 		/**
-	 * List of symbols names.
-	 */
-		private String[] symbols = {
-			"SYM00",
-			"SYM01",
-			"SYM02",
-			"SYM03",
-			"SYM04",
-			"SYM05",
-			"SYM06",
-			"SYM07",
-			"SYM08",
-			"SYM09",
-			"SYM10",
-			"SYM11",
-			"SYM12",
-			"SYM16",
-			"SYM17",
-			"SYM18",
-			"SYM19",
-		};
-
-		/**
 	 * Lines combinations.
 	 */
 		private int[][] reels = {
 			new int[] {
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0, 0, 0,
 			},
 			new int[] {
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0, 0, 0,
 			},
 			new int[] {
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0, 0, 0,
 			},
 			new int[] {
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0, 0, 0,
 			},
 			new int[] {
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0,	0,	0, 0, 0, 0,	0,	0, 0, 0, 
+				0, 0, 0,
 			},
 		};
 
@@ -549,7 +237,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		/**
 	* Symbols win hit rate in base game.
 	*/
-		private static long[][] baseSymbolMoney = {
+		private long[][] baseSymbolMoney = {
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -561,7 +249,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 		/**
 	* Symbols hit rate in base game.
 	*/
-		private static long[][] baseGameSymbolsHitRate = {
+		private long[][] baseGameSymbolsHitRate = {
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			new long[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -801,7 +489,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 				line [i] = -1;
 			}
 
-			int win = paytable [number] [symbol];
+			int win = Paytable.values [number] [symbol];
 
 			if (win > 0) {
 				baseSymbolMoney [number] [symbol] += win;
@@ -1015,7 +703,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 	*
 	* @date 27 Feb 2015
 	 */
-		public Simulation ()
+		public SlotMachineSimulation ()
 		{
 			totalBet = lines.Length;
 		}
@@ -1030,7 +718,7 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			return lostMoney;
 		}
 
-		public void loadReels (int[][]reels)
+		public void load (int[][]reels)
 		{
 			for (int i = 0; i < reels.Length; i++) {
 				for (int j = 0; j < reels [i].Length; j++) {
@@ -1135,12 +823,12 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			totalNumberOfGames++;
 		}
 
-		public double rtp ()
+		public double rtpDifference (double target)
 		{
-			return (double)wonMoney / (double)lostMoney;
+			return Math.Abs (target - (double)wonMoney / (double)lostMoney);
 		}
 
-		public double deviation ()
+		public double prizeDeviation ()
 		{
 			int k = 0;
 			double average = 0;
@@ -1173,6 +861,41 @@ namespace BingoSlotDifferentialEvolutionOptimization
 			return result;
 		}
 
+		public double symbolsDiversity (int length)
+		{
+			int count = 0;
+			int matches = 0;
+
+			for (int i = 0; i < reels.Length; i++) {
+				for (int j = 0; j < reels [i].Length; j++) {
+					for (int k = 0; k < length - 1; k++) {
+						for (int l = k + 1; l < length; l++) {
+							if ((reels [i] [(j + k) % reels [i].Length]) == (reels [i] [(j + l) % reels [i].Length])) {
+								matches++;
+							}
+							count++;
+						}
+					}
+				}
+			}
+
+			return (double)matches / (double)count;
+		}
+
+		public double costFunction (double target, int length)
+		{
+			return symbolsDiversity (length) * 100 + rtpDifference (target) * 10 + prizeDeviation () * 1;
+		}
+
+		public void simulate ()
+		{
+			for (int r = 0; r < NUMBER_OF_EXPERIMENTS; r++) {
+				for (long e = 0; e < NUMBER_OF_SIMUALTIONS; e++) {
+					runBaseGame ();
+				}
+			}
+		}
+
 		/**
                  * Print all simulation input data structures.
                  *
@@ -1188,14 +911,14 @@ namespace BingoSlotDifferentialEvolutionOptimization
 
 			result += "Paytable:";
 			result += "\r\n";
-			for (int i = 0; i < paytable.Length; i++) {
+			for (int i = 0; i < Paytable.values.Length; i++) {
 				result += "\t" + i + " of";
 			}
 			result += "\r\n";
-			for (int j = 0; j < paytable [0].Length; j++) {
+			for (int j = 0; j < Paytable.values [0].Length; j++) {
 				result += "SYM" + j + "\t";
-				for (int i = 0; i < paytable.Length; i++) {
-					result += paytable [i] [j] + "\t";
+				for (int i = 0; i < Paytable.values.Length; i++) {
+					result += Paytable.values [i] [j] + "\t";
 				}
 				result += "\r\n";
 			}
