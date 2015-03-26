@@ -1,4 +1,4 @@
-﻿<Properties>
+﻿<Properties GitUserInfo="UsingGIT" StartupItem="BingoSlotDifferentialEvolutionOptimization.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
   <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

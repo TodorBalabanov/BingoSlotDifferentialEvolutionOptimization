@@ -1,18 +1,16 @@
 ﻿using System;
 
-namespace BingoSlotDifferentialEvolutionOptimization
-{
-	class Util
-	{
-		/**
-		 * Report in steps.
-		 */
-		public const bool VERBOSE = true;
+namespace BingoSlotDifferentialEvolutionOptimization {
+class Util {
+	/**
+	 * Report in steps.
+	 */
+	public const bool VERBOSE = true;
 
-		/**
-		* Pseudo-random number generator.
-		*/
-		public static Random prng = new Random ();
-	}
+	/**
+	* Pseudo-random number generator.
+	*/
+	public static Random prng = new Random ();
+}
 }
 
