@@ -14,7 +14,12 @@ class MainClass {
 
 		DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels, 0.9, 3);
 		dde.optimize ();
-		Console.WriteLine (dde);
+		//Console.WriteLine (dde);
+		SlotMachineSimulation simulation = new SlotMachineSimulation ();
+		simulation.load (dde.best() );
+		simulation.simulate();
+		Console.WriteLine(simulation);
+
 
 //			for (int r = 0; r < SlotMachineSimulation.NUMBER_OF_EXPERIMENTS; r++) {
 //				SlotMachineSimulation simulation = new SlotMachineSimulation ();

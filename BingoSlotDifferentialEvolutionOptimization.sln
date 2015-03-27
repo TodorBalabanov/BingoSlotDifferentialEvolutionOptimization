@@ -14,7 +14,4 @@ Global
 		{CF73F52C-87A0-412A-A0DE-A3255711DA17}.Release|x86.ActiveCfg = Release|x86
 		{CF73F52C-87A0-412A-A0DE-A3255711DA17}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = BingoSlotDifferentialEvolutionOptimization.csproj
-	EndGlobalSection
 EndGlobal

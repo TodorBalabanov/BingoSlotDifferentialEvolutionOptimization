@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CF73F52C-87A0-412A-A0DE-A3255711DA17}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -41,5 +41,8 @@
     <Compile Include="Paytable.cs" />
     <Compile Include="Symbols.cs" />
     <Compile Include="SlotMachineSimulation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="format.sh" />
   </ItemGroup>
 </Project>

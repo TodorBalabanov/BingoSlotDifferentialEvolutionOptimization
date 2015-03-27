@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace BingoSlotDifferentialEvolutionOptimization {
 class DiscreteDifferentialEvolution {
-	public const long NUMBER_OF_RECOMBINATIONS = 100;
+	public const long NUMBER_OF_RECOMBINATIONS = 1000;
 
 	public const int POPULATION_SIZE = 17;
 
@@ -31,6 +31,10 @@ class DiscreteDifferentialEvolution {
 	private int bIndex = -1;
 
 	private int bestIndex = -1;
+
+	public int[][] best() {
+		return population[bestIndex];
+	}
 
 	public void select () {
 		do {
@@ -99,20 +103,43 @@ class DiscreteDifferentialEvolution {
 	}
 
 	public void survive () {
-		SlotMachineSimulation simulation = new SlotMachineSimulation ();
+		SlotMachineSimulation simulation = null;
+
+		/*
+		 * Re-evaluate target.
+		 */
+		if(Util.REEVALUATE == true) {
+			simulation = new SlotMachineSimulation ();
+			simulation.load (population [targetIndex]);
+			simulation.simulate ();
+			fitness [targetIndex] = simulation.costFunction (targetRtp, symbolsDiversity);
+		}
+
+		/*
+		 * Evaluate new solution.
+		 */
+		simulation = new SlotMachineSimulation ();
 		simulation.load (offspring);
 		simulation.simulate ();
 		double cost = simulation.costFunction (targetRtp, symbolsDiversity);
-		if (cost < fitness [targetIndex]) {
-			fitness [targetIndex] = cost;
-			for (int i = 0; i < offspring.Length; i++) {
-				for (int j = 0; j < offspring [i].Length; j++) {
-					population [targetIndex] [i] [j] = offspring [i] [j];
-				}
+
+		/*
+		 * If better solution is not found - exit.
+		 */
+		if (cost >= fitness [targetIndex]) {
+			return;
+		}
+
+		fitness [targetIndex] = cost;
+
+		for (int i = 0; i < offspring.Length; i++) {
+			for (int j = 0; j < offspring [i].Length; j++) {
+				population [targetIndex] [i] [j] = offspring [i] [j];
 			}
-			if (fitness [bestIndex] > fitness [targetIndex]) {
-				bestIndex = targetIndex;
-			}
+		}
+
+		if (fitness [bestIndex] > fitness [targetIndex]) {
+			bestIndex = targetIndex;
 		}
 	}
 
@@ -128,8 +155,8 @@ class DiscreteDifferentialEvolution {
 
 			if (Util.VERBOSE == true) {
 				CultureInfo ci = new CultureInfo ("en-us");
-				Console.WriteLine (this);
 				Console.WriteLine ("{0}:{1}:{2}", ((int)watch.Elapsed.TotalHours).ToString ("D2", ci), ((int)watch.Elapsed.TotalMinutes % 60).ToString ("D2", ci), ((int)watch.Elapsed.TotalSeconds % 60).ToString ("D2", ci));
+				Console.WriteLine (this);
 			}
 		}
 	}

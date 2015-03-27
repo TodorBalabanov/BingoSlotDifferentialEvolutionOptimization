@@ -5,6 +5,11 @@ class Util {
 	/**
 	 * Report in steps.
 	 */
+	public const bool REEVALUATE = true;
+
+	/**
+	 * Report in steps.
+	 */
 	public const bool VERBOSE = true;
 
 	/**
