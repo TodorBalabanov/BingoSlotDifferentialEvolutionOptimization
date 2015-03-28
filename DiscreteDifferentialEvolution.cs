@@ -212,10 +212,24 @@ class DiscreteDifferentialEvolution {
 		}
 
 		/*
+		 * Just put a big number (bad fitness), when there is no evaluation.
+		 */
+		for (int p = 0; p < population.Length; p++) {
+			fitness [p] = int.MaxValue;
+		}
+
+		/*
 		 * Evaluate population fintess.
 		 */
 		bestIndex = 0;
 		for (int p = 0; p < population.Length; p++) {
+			/*
+			 * It will be evaluated in the first surviver.
+			 */
+			if(Util.REEVALUATE == true) {
+				break.
+			}
+			
 			SlotMachineSimulation simulation = new SlotMachineSimulation ();
 			simulation.load (population [p]);
 			simulation.simulate ();
