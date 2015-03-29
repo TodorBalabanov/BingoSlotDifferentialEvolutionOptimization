@@ -17,7 +17,7 @@ class MainClass {
 		//Console.WriteLine (dde);
 		SlotMachineSimulation simulation = new SlotMachineSimulation ();
 		simulation.load (dde.best() );
-		simulation.simulate();
+		simulation.simulate( 3 );
 		Console.WriteLine(simulation);
 
 

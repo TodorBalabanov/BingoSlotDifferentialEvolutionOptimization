@@ -1,11 +1,17 @@
-﻿using System;
+﻿
+using System;
 
 namespace BingoSlotDifferentialEvolutionOptimization {
 class Util {
 	/**
+	 * Enforce symbols diversity.
+	 */
+	public const bool STRICT_SYMBOLS_DIVERSITY = true;
+
+	/**
 	 * Report in steps.
 	 */
-	public const bool REEVALUATE = true;
+	public const bool REEVALUATE_TARGET_VECTOR = true;
 
 	/**
 	 * Report in steps.

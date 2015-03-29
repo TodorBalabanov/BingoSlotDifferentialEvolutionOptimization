@@ -17,7 +17,7 @@ class SlotMachineSimulation {
 
 	public const long NUMBER_OF_EXPERIMENTS = 10;
 
-	public const long NUMBER_OF_SIMUALTIONS = 1000000;
+	public const long NUMBER_OF_SIMUALTIONS = 10000;//00;
 
 	/**
 	* Bingo line bonus distribution.
@@ -702,11 +702,12 @@ class SlotMachineSimulation {
 	}
 
 	public void load (int[][]reels) {
-		for (int i = 0; i < reels.Length; i++) {
-			for (int j = 0; j < reels [i].Length; j++) {
-				this.reels [i] [j] = reels [i] [j];
-			}
-		}
+		this.reels = reels;
+//		for (int i = 0; i < reels.Length; i++) {
+//			for (int j = 0; j < reels [i].Length; j++) {
+//				this.reels [i] [j] = reels [i] [j];
+//			}
+//		}
 	}
 
 	/**
@@ -802,6 +803,27 @@ class SlotMachineSimulation {
 		totalNumberOfGames++;
 	}
 
+	public void enforceSymbolsDiversity (int length) {
+		int matches = 0;
+
+		for (int i = 0; i < reels.Length; i++) {
+			for (int j = 0; j < reels [i].Length; j++) {
+				for (int k = 0; k < length - 1; k++) {
+					for (int l = k + 1; l < length; l++) {
+						if ((reels [i] [(j + k) % reels [i].Length]) == (reels [i] [(j + l) % reels [i].Length])) {
+							reels [i] [(j + l) % reels [i].Length] = Symbols.randomValid ();
+							matches++;
+						}
+					}
+				}
+			}
+		}
+
+		if (matches > 0) {
+			enforceSymbolsDiversity (length);
+		}
+	}
+
 	public double rtpDifference (double target) {
 		return Math.Abs (target - (double)wonMoney / (double)lostMoney);
 	}
@@ -862,7 +884,11 @@ class SlotMachineSimulation {
 		return symbolsDiversity (length) * 1 + rtpDifference (target) * 100 + prizeDeviation () * 10;
 	}
 
-	public void simulate () {
+	public void simulate (int length) {
+		if (Util.STRICT_SYMBOLS_DIVERSITY == true) {
+			enforceSymbolsDiversity (length);
+		}
+
 		for (int r = 0; r < NUMBER_OF_EXPERIMENTS; r++) {
 			for (long e = 0; e < NUMBER_OF_SIMUALTIONS; e++) {
 				runBaseGame ();

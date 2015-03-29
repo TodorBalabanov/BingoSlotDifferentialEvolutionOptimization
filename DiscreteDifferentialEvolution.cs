@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace BingoSlotDifferentialEvolutionOptimization {
 class DiscreteDifferentialEvolution {
-	public const long NUMBER_OF_RECOMBINATIONS = 1000;
+	public const long NUMBER_OF_RECOMBINATIONS = 10;//00;
 
 	public const int POPULATION_SIZE = 17;
 
@@ -108,10 +108,10 @@ class DiscreteDifferentialEvolution {
 		/*
 		 * Re-evaluate target.
 		 */
-		if(Util.REEVALUATE == true) {
+		if(Util.REEVALUATE_TARGET_VECTOR == true) {
 			simulation = new SlotMachineSimulation ();
 			simulation.load (population [targetIndex]);
-			simulation.simulate ();
+			simulation.simulate (symbolsDiversity);
 			fitness [targetIndex] = simulation.costFunction (targetRtp, symbolsDiversity);
 
 			if (fitness [bestIndex] > fitness [targetIndex]) {
@@ -124,7 +124,7 @@ class DiscreteDifferentialEvolution {
 		 */
 		simulation = new SlotMachineSimulation ();
 		simulation.load (offspring);
-		simulation.simulate ();
+		simulation.simulate (symbolsDiversity);
 		double cost = simulation.costFunction (targetRtp, symbolsDiversity);
 
 		/*
@@ -230,13 +230,13 @@ class DiscreteDifferentialEvolution {
 			/*
 			 * It will be evaluated in the first surviver.
 			 */
-			if(Util.REEVALUATE == true) {
+			if(Util.REEVALUATE_TARGET_VECTOR == true) {
 				break;
 			}
 			
 			SlotMachineSimulation simulation = new SlotMachineSimulation ();
 			simulation.load (population [p]);
-			simulation.simulate ();
+			simulation.simulate (symbolsDiversity);
 			fitness [p] = simulation.costFunction (targetRtp, symbolsDiversity);
 			if (fitness [bestIndex] > fitness [p]) {
 				bestIndex = p;
