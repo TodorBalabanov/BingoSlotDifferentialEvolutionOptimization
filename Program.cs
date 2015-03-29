@@ -14,28 +14,11 @@ class MainClass {
 
 		DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels, 0.9, 3);
 		dde.optimize ();
-		//Console.WriteLine (dde);
+		//Console.WriteLine( dde );
 		SlotMachineSimulation simulation = new SlotMachineSimulation ();
-		simulation.load (dde.best() );
+		simulation.load( dde.best() );
 		simulation.simulate( 3 );
 		Console.WriteLine(simulation);
-
-
-//			for (int r = 0; r < SlotMachineSimulation.NUMBER_OF_EXPERIMENTS; r++) {
-//				SlotMachineSimulation simulation = new SlotMachineSimulation ();
-//				simulation.load (reels);
-//
-//				for (long e = 0; e < SlotMachineSimulation.NUMBER_OF_SIMUALTIONS; e++) {
-//					simulation.runBaseGame ();
-//				}
-//
-//				Console.WriteLine (simulation);
-//
-//				Console.WriteLine ("RTP difference from target: " + simulation.rtpDifference (0.9));
-//				Console.WriteLine ("Prize deviation MSE: " + simulation.prizeDeviation ());
-//				Console.WriteLine ("Symbols diversity: " + simulation.symbolsDiversity (3));
-//				Console.WriteLine ("Cost function: " + simulation.costFunction (0.9, 3));
-//			}
 	}
 }
 }

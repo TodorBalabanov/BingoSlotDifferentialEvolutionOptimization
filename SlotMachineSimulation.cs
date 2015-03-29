@@ -17,7 +17,7 @@ class SlotMachineSimulation {
 
 	public const long NUMBER_OF_EXPERIMENTS = 10;
 
-	public const long NUMBER_OF_SIMUALTIONS = 10000;//00;
+	public const long NUMBER_OF_SIMUALTIONS = 1000000;
 
 	/**
 	* Bingo line bonus distribution.
@@ -410,6 +410,37 @@ class SlotMachineSimulation {
 
 		bingoLineIndex = -1;
 		bingoCardIndex = -1;
+	}
+
+	/**
+	* Single reels spin to fill view with symbols.
+	*
+	* @param reels Reels strips.
+	*
+	* @author Todor Balabanov
+	*
+	* @email tdb@tbsoft.eu
+	*
+	* @date 10 Mar 2013
+	*/
+	private void spin (int[][] reels, int[] positions){
+		for (int i = 0; i < view.Length && i < reels.Length; i++) {
+			int r = positions[i];
+			int u = r - 1;
+			int d = r + 1;
+
+			if (u < 0) {
+				u = reels [i].Length - 1;
+			}
+
+			if (d >= reels [i].Length) {
+				d = 0;
+			}
+
+			view [i] [0] = reels [i] [u];
+			view [i] [1] = reels [i] [r];
+			view [i] [2] = reels [i] [d];
+		}
 	}
 
 	/**
@@ -824,6 +855,43 @@ class SlotMachineSimulation {
 		}
 	}
 
+	public int maxWin (){
+		int max = 0;
+		int win = 0;
+		int[] positions = new int[reels.Length];
+
+		for (int i=0; i<positions.Length; i++) {
+			positions [i] = 0;
+		}
+
+		bool done = true;
+		do {
+			spin (reels, positions);
+			win = linesWin (reels);
+			if (win > max) {
+				max = win;
+			}
+		
+			positions [0]++;
+			for (int i=0; i<positions.Length-1; i++) {
+				if (positions [i] >= reels [i].Length) {
+					positions [i] = 0;
+					positions [i + 1]++;
+				}
+			}
+			
+			done = true;
+			for (int i=0; i<positions.Length; i++) {
+				if(positions[i]<reels[i].Length-1) {
+					done = false;
+					break;
+				}
+			}
+		} while (done == false);
+		
+		return max;
+	}
+
 	public double rtpDifference (double target) {
 		return Math.Abs (target - (double)wonMoney / (double)lostMoney);
 	}
@@ -1033,6 +1101,8 @@ class SlotMachineSimulation {
 		result += "\r\n";
 		result += ("Max Win in Base Game:\t" + baseMaxWin);
 		result += "\r\n";
+//		result += ("Max Possible Win in Base Game:\t" + maxWin());
+//		result += "\r\n";
 
 		result += "\r\n";
 		result += ("Base Game Symbols RTP:");
