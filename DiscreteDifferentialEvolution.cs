@@ -113,6 +113,10 @@ class DiscreteDifferentialEvolution {
 			simulation.load (population [targetIndex]);
 			simulation.simulate ();
 			fitness [targetIndex] = simulation.costFunction (targetRtp, symbolsDiversity);
+
+			if (fitness [bestIndex] > fitness [targetIndex]) {
+				bestIndex = targetIndex;
+			}
 		}
 
 		/*
@@ -227,7 +231,7 @@ class DiscreteDifferentialEvolution {
 			 * It will be evaluated in the first surviver.
 			 */
 			if(Util.REEVALUATE == true) {
-				break.
+				break;
 			}
 			
 			SlotMachineSimulation simulation = new SlotMachineSimulation ();
