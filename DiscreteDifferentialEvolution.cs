@@ -165,6 +165,40 @@ class DiscreteDifferentialEvolution {
 		}
 	}
 
+	public void initialSinglePoint(int[][] reels) {
+		for (int p = 0; p < population.Length; p++) {
+			for (int i = 0; i < reels.Length; i++) {
+				for (int j = 0; j < reels [i].Length; j++) {
+					population [p] [i] [j] = reels [i] [j];
+				}
+			}
+		}
+
+		/*
+		 * Move around, but keep the first unchanged.
+		 */
+		for (int p = 1; p < population.Length; p++) {
+			for (int i = 0; i < reels.Length; i++) {
+				for (int j = 0; j < reels [i].Length; j++) {
+					int q = Util.prng.Next (reels [i].Length);
+					int swap = population [p] [i] [q];
+					population [p] [i] [q] = population [p] [i] [j];
+					population [p] [i] [j] = swap;
+				}
+			}
+		}
+	}
+
+	public void initialRandomPoints() {
+		for (int p = 0; p < population.Length; p++) {
+			for (int i = 0; i < population [p].Length; i++) {
+				for (int j = 0; j < population [p] [i].Length; j++) {
+					population [p] [i] [j] = Symbols.randomValid();
+				}
+			}
+		}
+	}
+
 	public DiscreteDifferentialEvolution (int[][] reels, double targetRtp, int symbolsDiversity) {
 		if (reels.Length != NUMBER_OF_REELS) {
 			Console.WriteLine ("Number of reals is incorrect!");
@@ -193,26 +227,10 @@ class DiscreteDifferentialEvolution {
 		this.targetRtp = targetRtp;
 		this.symbolsDiversity = symbolsDiversity;
 
-		for (int p = 0; p < population.Length; p++) {
-			for (int i = 0; i < reels.Length; i++) {
-				for (int j = 0; j < reels [i].Length; j++) {
-					population [p] [i] [j] = reels [i] [j];
-				}
-			}
-		}
-
-		/*
-		 * Move around, but keep the first unchanged.
-		 */
-		for (int p = 1; p < population.Length; p++) {
-			for (int i = 0; i < reels.Length; i++) {
-				for (int j = 0; j < reels [i].Length; j++) {
-					int q = Util.prng.Next (reels [i].Length);
-					int swap = population [p] [i] [q];
-					population [p] [i] [q] = population [p] [i] [j];
-					population [p] [i] [j] = swap;
-				}
-			}
+		if(Util.RANDOM_INITIAL_REELS == true){
+				initialRandomPoints();
+		} else {
+			initialSinglePoint(reels);
 		}
 
 		/*
