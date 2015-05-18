@@ -12,7 +12,7 @@ class MainClass {
 			new int[] {4,8,7,5,12,12,11,4,4,8,3,11,11,8,5,7,10,10,12,8,5,3,7,7,11,3,11,7,8,11,6,11,11,11,10,11,7,9,11,7,7,10,12,12,7,3,12,5,12,3,5,6,4,6,12,3,7,10,5,9,4,9,4,},
 		};
 
-		DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels, 0.9, 3);
+		DiscreteDifferentialEvolution dde = new DiscreteDifferentialEvolution (reels, 0.90, 3);
 		dde.optimize ();
 		//Console.WriteLine( dde );
 		SlotMachineSimulation simulation = new SlotMachineSimulation ();
