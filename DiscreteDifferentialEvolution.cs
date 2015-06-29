@@ -155,9 +155,11 @@ class DiscreteDifferentialEvolution {
 			mutate ();
 			crossover ();
 			survive ();
+			//TODO Remove absolutely identical individuals from the population.
 			watch.Stop ();
 
 			if (Util.VERBOSE == true) {
+				Console.WriteLine (targetRtp);
 				CultureInfo ci = new CultureInfo ("en-us");
 				Console.WriteLine ("{0}:{1}:{2}", ((int)watch.Elapsed.TotalHours).ToString ("D2", ci), ((int)watch.Elapsed.TotalMinutes % 60).ToString ("D2", ci), ((int)watch.Elapsed.TotalSeconds % 60).ToString ("D2", ci));
 				Console.WriteLine (this);
