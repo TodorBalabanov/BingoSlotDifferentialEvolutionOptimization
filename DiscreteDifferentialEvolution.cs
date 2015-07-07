@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace BingoSlotDifferentialEvolutionOptimization {
 class DiscreteDifferentialEvolution {
-	public const long NUMBER_OF_RECOMBINATIONS = 100;
+	public const long NUMBER_OF_RECOMBINATIONS = 1000;
 
 	public const int POPULATION_SIZE = 17;
 
