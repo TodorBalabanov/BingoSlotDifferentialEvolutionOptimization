@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace BingoSlotDifferentialEvolutionOptimization {
 class SlotMachineSimulation {
@@ -186,6 +187,11 @@ class SlotMachineSimulation {
 		new int[]{ -1, -1, -1 },
 		new int[]{ -1, -1, -1 },
 	};
+
+	/**
+	* All positive wins.
+	*/
+	private ArrayList wins = new ArrayList(); 
 
 	/**
 	* Total bet in single base game spin.
@@ -772,6 +778,7 @@ class SlotMachineSimulation {
 		* Win accumulated by lines.
 		*/
 		int win = linesWin (view);
+		int win1 = win;
 
 		/*
 		* Add win to the statistics.
@@ -802,6 +809,7 @@ class SlotMachineSimulation {
 			win = bingoLineWin ();
 			bonusGameHitRate++;
 		}
+		int win2 = win;
 
 		/*
 		* Add win to the statistics.
@@ -816,12 +824,17 @@ class SlotMachineSimulation {
 			win = bingoWin ();
 			bonusGameHitRate++;
 		}
+		int win3 = win;
 
 		/*
 		* Add win to the statistics.
 		*/
 		bonusMoney += win;
 		wonMoney += win;
+
+		if((win1+win2+win3) > 0) {
+			wins.Add(win1+win2+win3);
+		}
 	}
 
 	public void runBaseGame () {
@@ -1103,6 +1116,25 @@ class SlotMachineSimulation {
 		result += "\r\n";
 //		result += ("Max Possible Win in Base Game:\t" + maxWin());
 //		result += "\r\n";
+
+		double mean = 0;
+
+		foreach(int value in wins) {
+				mean += (double)value / (double) totalNumberOfGames;
+		}
+		result += ("Mean Win:\t" + mean);
+		result += "\r\n";
+
+		double sd = 0;
+		foreach(int value in wins) {
+				sd += ((double)value-mean)*((double)value-mean) / (double) totalNumberOfGames;
+		}
+		for(int i=wins.Count; i<totalNumberOfGames; i++) {
+				sd += (mean*mean) / (double) totalNumberOfGames;
+		}
+		sd = Math.Sqrt(sd);
+		result += ("Standard Deviation Win:\t" + sd);
+		result += "\r\n";
 
 		result += "\r\n";
 		result += ("Base Game Symbols RTP:");
