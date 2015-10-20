@@ -21,7 +21,7 @@ class Util {
 	/**
 	 * Report in steps.
 	 */
-	public const bool VERBOSE = true;
+	public const bool VERBOSE = false;
 
 	/**
 	* Pseudo-random number generator.

@@ -105,6 +105,8 @@ new int[] {9,10,6,9,7,12,4,3,10,7,9,10,7,8,3,6,9,11,6,12,10,3,11,4,6,3,7,9,5,3,8
 			simulation.load( dde.best() );
 			simulation.simulate( 3 );
 			Console.WriteLine("Target RTP:\t" + targets[i]);
+			Console.WriteLine ();
+			Console.WriteLine (dde);
 			Console.WriteLine(simulation);
 		}
 	}
